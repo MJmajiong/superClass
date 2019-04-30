@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+</head>
+<body>
+
+        这是main页面
+        <input type="file" id="file" multiple = "multiple" onchange="change()">
+        <input type="button" onclick="submitFile()" value="asd">
+
+        <a href="/getPic?path=file\6a59190539279a0ccf3a36a2cd22aa4d" download="1111.png">点击此处下载</a>
+        <!--download后面的名字是没有关系的，主要是找到了/getPic?path=file\6a59190539279a0ccf3a36a2cd22aa4d这个路径就能下载具体的文件-->
+
+        <img  id="pid" src="#" alt="">
+        <script>
+            function submitFile() {
+                var file = document.getElementById("file").files[0];
+
+                var form = new FormData();
+                form.append("filename", file);
+
+                var xhr = new XMLHttpRequest();
+                xhr.open("post", "/upload", true);
+                xhr.onload = function () {
+                    alert("上传完成");
+                };
+                xhr.send(form);
+                xhr.onreadystatechange = function () {
+                    if(xhr.readyState == 4 && xhr.status == 200){
+                        var path = xhr.responseText;
+                        console.log(path);
+                        document.getElementById("pid").src = "/getPic?path=" + path;
+                    }
+                }
+            }
+
+
+            function change() {
+                var doc = document.getElementById("file");
+                console.log(doc.files.length);
+            }
+        </script>
+</body>
+</html>
