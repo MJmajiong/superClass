@@ -72,7 +72,7 @@ function getClassInformation(request, response) {
 path.set("/api/saveData", saveData);
 path.set("/api/search", search);
 path.set("/api/getClassInformation", getClassInformation);
-path.set("/api/getClassInformation", getClassInformation);
+
 
 
 module.exports.path = path;
