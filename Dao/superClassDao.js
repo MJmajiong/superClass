@@ -53,7 +53,7 @@ function searchUserAndPassword(user, password, success) {
 
 function searchClassInformation(week, studentUser, success) {
     console.log(week, studentUser);
-    var querySql = "select * from classInformation_copy where week = ? and studentUser = ?;";
+    var querySql = "select * from classInformation where week = ? and studentUser = ?;";
     var connection = dbutil.createConnection();
     connection.connect();
     var params = [week, studentUser];
@@ -78,7 +78,7 @@ function updateClassInformation(information, success){
     str=str.substring(0,str.length-1)
     str += ')'
     console.log(weekNum)
-    var querySql = "update classInformation_copy set className=?, classRoom=?, weekNum=?, teacher=?, descrition=? where dayOfWeek=? and classNum=? "
+    var querySql = "update classInformation set className=?, classRoom=?, weekNum=?, teacher=?, descrition=? where dayOfWeek=? and classNum=? "
     let params = [information.className, information.classRoom, information.weekNum, information.teacher,  information.descrition, information.dayOfWeek, information.classNum];
     var connection = dbutil.createConnection();
     connection.connect(); 
@@ -95,7 +95,7 @@ function updateClassInformation(information, success){
 
 function deleteClassInformation(information, success){
     console.log(information, 88888888888888888888888)
-    var querySql = "update classInformation_copy set className='', classRoom='', weekNum='', teacher='', descrition='' where dayOfWeek=? and classNum=?;";
+    var querySql = "update classInformation set className='', classRoom='', weekNum='', teacher='', descrition='' where dayOfWeek=? and classNum=?;";
     var connection = dbutil.createConnection();
     connection.connect();
     var params = [information.dayOfWeek, information.classNum];
