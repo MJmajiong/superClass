@@ -36,6 +36,7 @@ app.get("/api/*", function (request, response, next){
 
 app.post("/api/search", jsonParser, loader.get("/api/search"));
 app.get("/api/getClassInformation",loader.get("/api/getClassInformation"));
-
+app.put("/api/save",jsonParser, loader.get("/api/save"))
+app.delete("/api/deleteClass",jsonParser, loader.get("/api/deleteClass"))
 
 app.listen(9999);

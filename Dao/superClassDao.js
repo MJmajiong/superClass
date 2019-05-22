@@ -1,5 +1,23 @@
 var dbutil = require("./dbutil");
 
+function getClassWeek(classWeek){
+    let bb = classWeek.split(',');
+    const reg = /-/g;
+    let dd = []
+    bb.forEach(item => {
+        let flag = reg.test(item)
+        if(flag){
+            let cc=item.split('-')
+            for(let i = cc[0]; i <= cc[1]; i++){
+                dd.push(i)
+            }
+        }else{
+            dd.push(item)
+        }
+    })
+    return dd
+}
+
 function inserSuperClassData(className, classRoom, weekNum, teacher, success) {
     var querySql = "insert into superClass (className, classRoom, weekNum, teacher) values(?, ?, ?, ?);";
     var params = [className, classRoom, weekNum, teacher];
@@ -35,10 +53,52 @@ function searchUserAndPassword(user, password, success) {
 
 function searchClassInformation(week, studentUser, success) {
     console.log(week, studentUser);
-    var querySql = "select * from classInformation where week = ? and studentUser = ?;";
+    var querySql = "select * from classInformation_copy where week = ? and studentUser = ?;";
     var connection = dbutil.createConnection();
     connection.connect();
     var params = [week, studentUser];
+    connection.query(querySql, params, function (error, result) {
+        if(error == null){
+            success(result)
+        }else{
+            throw new Error(error);
+        }
+    });
+    connection.end()
+}
+
+function updateClassInformation(information, success){
+    let weekNum = getClassWeek(information.weekNum)
+    let str = '('
+    weekNum = weekNum.map(item => {
+        str += item
+        str += ','
+        return parseInt(item)
+    })
+    str=str.substring(0,str.length-1)
+    str += ')'
+    console.log(weekNum)
+    var querySql = "update classInformation_copy set className=?, classRoom=?, weekNum=?, teacher=?, descrition=? where dayOfWeek=? and classNum=? "
+    let params = [information.className, information.classRoom, information.weekNum, information.teacher,  information.descrition, information.dayOfWeek, information.classNum];
+    var connection = dbutil.createConnection();
+    connection.connect(); 
+    connection.query(querySql, params, function (error, result){
+        if(error == null){
+            console.log(result)
+            success(result)
+        }else{
+            throw new Error(error)
+        }
+    })
+    connection.end()
+}
+
+function deleteClassInformation(information, success){
+    console.log(information, 88888888888888888888888)
+    var querySql = "update classInformation_copy set className='', classRoom='', weekNum='', teacher='', descrition='' where dayOfWeek=? and classNum=?;";
+    var connection = dbutil.createConnection();
+    connection.connect();
+    var params = [information.dayOfWeek, information.classNum];
     connection.query(querySql, params, function (error, result) {
         if(error == null){
             success(result)
@@ -55,4 +115,6 @@ function searchClassInformation(week, studentUser, success) {
 
 module.exports = {"inserSuperClassData":inserSuperClassData,
                   "searchUserAndPassword":searchUserAndPassword,
-                  "searchClassInformation":searchClassInformation};
+                  "searchClassInformation":searchClassInformation,
+                "updateClassInformation":updateClassInformation,
+                "deleteClassInformation":deleteClassInformation};

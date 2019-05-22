@@ -15,7 +15,7 @@ function saveData(request, response) {
 }
 
 function search(request, response) {
-    // console.log(request.body);
+    // console.log(request.body, "nihao");
     superClassDao.searchUserAndPassword(request.body.user, request.body.password, function (result) {
         // console.log(result[0].studentPassword, 6566666);
         // console.log(result[0].studentUser);
@@ -69,9 +69,30 @@ function getClassInformation(request, response) {
     })
 }
 
+function save(request, response) {
+    // console.log(request.body)
+    superClassDao.updateClassInformation(request.body, function(result){
+        response.writeHead(200);
+        response.write("{msg:'更改成功',code:'1}");
+        response.end();
+    })
+}
+
+function deleteClass(request, response){
+    console.log(request.body)
+    superClassDao.deleteClassInformation(request.body, function (result){
+        console.log(result)
+        response.writeHead(200);
+        response.write("{msg:'删除成功',code:'1}");
+        response.end();
+    })
+}
+
 path.set("/api/saveData", saveData);
 path.set("/api/search", search);
 path.set("/api/getClassInformation", getClassInformation);
+path.set("/api/save", save)
+path.set("/api/deleteClass",deleteClass)
 
 
 
